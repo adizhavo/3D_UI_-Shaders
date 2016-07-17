@@ -1,4 +1,4 @@
-﻿Shader "Showreel/Universe" {
+﻿Shader "GG Shader/Universe" {
 Properties{
 	_MainTex ("Main Texture", 2D) = "white" {}
 	_BlendTexture ("Secondary Texture", 2D) = "white" {}

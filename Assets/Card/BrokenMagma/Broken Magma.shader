@@ -1,9 +1,9 @@
-﻿Shader "Showreel/Broken Magma" {
+﻿Shader "GG Shader/Broken Magma" {
 Properties{
 	_ColorTex ("Color Texture", 2D) = "white" {}
 	_HeightMap ("Height Map", 2D) = "white" {}
-	_UVXPos ("UV X Position", Range(0, 1)) = 0
-	//_UVYPos ("UV Y Position", Range(0, 1)) = 0
+	_UVXPos ("UV X Position", Range(-1.5, 1.5)) = 0
+	_MaskSlope ("Mask Slope", Range(0.5, 1.5)) = 0
 	_Thickness("Thickness", Range(0, 1)) = 0.2
 }
 SubShader {
@@ -23,7 +23,7 @@ SubShader {
 
 	        uniform fixed _Thickness;
 	        uniform fixed _UVXPos;
-	        //uniform fixed _UVYPos;
+	        uniform fixed _MaskSlope;
 
 	        struct appdata {
 	            float4 pos : POSITION;
@@ -45,7 +45,10 @@ SubShader {
 	        float4 frag( v2f i ) : COLOR {
 
 	        	float4 mainTex = float4( tex2D(_MainTex, i.uv) );
-	        	float dist = abs(i.uv.x - _UVXPos);
+
+	        	float convertedXPos = _UVXPos + i.uv.y / _MaskSlope;
+
+	        	float dist = distance(i.uv.x, convertedXPos);
 
 	        	if (dist < _Thickness)
 	        	{
