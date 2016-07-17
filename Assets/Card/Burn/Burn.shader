@@ -1,4 +1,4 @@
-﻿Shader "Showreel/Burn"
+﻿Shader "GG Shader/Burn"
 {
 	Properties 
 	{
