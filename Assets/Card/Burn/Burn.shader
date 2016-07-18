@@ -30,22 +30,24 @@
 			uniform sampler2D _HeightMap;
 			uniform sampler2D _BurnedTex;
 
-			uniform float4 _BurnColor;
-			uniform float4 _AshColor;
-			uniform float _BurnThickness;
-			uniform float _BurnControl;
+			uniform fixed4 _BurnColor;
+			uniform fixed4 _AshColor;
+			uniform fixed _BurnThickness;
+			uniform fixed _BurnControl;
 			uniform bool _BlendBurned;
+
+			uniform float4 _HeightMap_ST;
 
 			struct appData
 			{
-				float4 pos : POSITION;
-				float2 uv : TEXCOORD0;
+				fixed4 pos : POSITION;
+				fixed2 uv : TEXCOORD0;
 			};
 
 			struct v2f
 			{
-				float4 pos : SV_POSITION;
-				float2 uv : TEXCOORD0;
+				fixed4 pos : SV_POSITION;
+				fixed2 uv : TEXCOORD0;
 			};
 
 			v2f vert(appData input)
@@ -58,28 +60,28 @@
 				return output;
 			}
 
-			float grayscale (float r, float g, float b)
+			fixed grayscale (fixed r, fixed g, fixed b)
 			{
 				return (r + g + b) / 3;
 			}
 
-			float4 frag(v2f input) : COLOR
+			fixed4 frag(v2f input) : COLOR
 			{
-				float4 textColor = float4( tex2D(_MainTex, input.uv));
+				fixed4 textColor = fixed4( tex2D(_MainTex, input.uv));
 
-				float4 heightColor = float4( tex2D(_HeightMap, input.uv));
+				fixed4 heightColor = fixed4( tex2D(_HeightMap, TRANSFORM_TEX(input.uv, _HeightMap)));
 
-				float4 burnedTexture = float4( tex2D(_BurnedTex, input.uv));
+				fixed4 burnedTexture = fixed4( tex2D(_BurnedTex, input.uv));
 
-				float heightGrayscale = 1 - grayscale(heightColor.r, heightColor.b, heightColor.g) - _BurnThickness;
+				fixed heightGrayscale = 1 - grayscale(heightColor.r, heightColor.b, heightColor.g) - _BurnThickness;
 
 				if (heightGrayscale < _BurnControl - _BurnThickness) // already burned
 				{
-					textColor = _BlendBurned == 1 ? textColor * _BurnColor * burnedTexture : burnedTexture * float4(1, 1, 1, textColor.a);
+					textColor = _AshColor * burnedTexture * fixed4(1, 1, 1, textColor.a);
 				}
 				else if (heightGrayscale < _BurnControl + _BurnThickness) // is burning
 				{
-					textColor = textColor * _AshColor;
+					textColor = textColor * _BurnColor;
 				}
 
 				return textColor;
