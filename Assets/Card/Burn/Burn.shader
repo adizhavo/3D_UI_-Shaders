@@ -65,19 +65,19 @@
 				return (r + g + b) / 3;
 			}
 
-			fixed4 frag(v2f input) : COLOR
+			half4 frag(v2f input) : COLOR
 			{
-				fixed4 textColor = fixed4( tex2D(_MainTex, input.uv));
+				half4 textColor = half4( tex2D(_MainTex, input.uv));
 
-				fixed4 heightColor = fixed4( tex2D(_HeightMap, TRANSFORM_TEX(input.uv, _HeightMap)));
+				half4 heightColor = half4( tex2D(_HeightMap, TRANSFORM_TEX(input.uv, _HeightMap)));
 
-				fixed4 burnedTexture = fixed4( tex2D(_BurnedTex, input.uv));
+				half4 burnedTexture = half4( tex2D(_BurnedTex, input.uv));
 
 				fixed heightGrayscale = 1 - grayscale(heightColor.r, heightColor.b, heightColor.g) - _BurnThickness;
 
 				if (heightGrayscale < _BurnControl - _BurnThickness) // already burned
 				{
-					textColor = _AshColor * burnedTexture * fixed4(1, 1, 1, textColor.a);
+					textColor = _AshColor * burnedTexture * half4(1, 1, 1, textColor.a);
 				}
 				else if (heightGrayscale < _BurnControl + _BurnThickness) // is burning
 				{

@@ -44,9 +44,9 @@
 	            return o;
 	        }
 	        
-	        float4 frag( output i ) : COLOR 
+	        half4 frag( output i ) : COLOR 
 	        {
-	        	float4 mainTex = float4(tex2D(_MainTex, i.uv));
+	        	half4 mainTex = half4(tex2D(_MainTex, i.uv));
 	        	return mainTex;
 	        }
 	        ENDCG
@@ -67,7 +67,7 @@
 	        uniform fixed _Thickness;
 	        uniform fixed _UVXPos;
 	        uniform fixed _MaskSlope;
-	        uniform float _AlphaControl;
+	        uniform fixed _AlphaControl;
 
 	        struct input {
 	            float4 pos : POSITION;
@@ -86,27 +86,27 @@
 	            return o;
 	        }
 
-	        float4 maskTexture(float dist, float2 uv)
+	        half4 maskTexture(float dist, float2 uv)
 	        {
 	        	if (dist < _Thickness)
 	        	{
-	        		float4 maskTex = float4(tex2D(_HeightMap, uv));
-	        		float4 reflectedTex = float4(tex2D(_ColorTex, uv));
+	        		half4 maskTex = half4(tex2D(_HeightMap, uv));
+	        		half4 reflectedTex = half4(tex2D(_ColorTex, uv));
 
-	        		float difference = abs(dist - _Thickness) / abs(_UVXPos - _Thickness);
+	        		fixed difference = abs(dist - _Thickness) / abs(_UVXPos - _Thickness);
 	        		difference = pow(difference, _AlphaControl);
 
-	        		return float4(reflectedTex.rgb, difference * maskTex.a);
+	        		return half4(reflectedTex.rgb, difference * maskTex.a);
 	        	}
 
 	        	return 0;
 	        }
 	        
-	        float4 frag( output i ) : COLOR 
+	        half4 frag( output i ) : COLOR 
 	        {
-	        	float convertedXPos = _UVXPos + i.uv.y / _MaskSlope;
-	        	float dist = distance(i.uv.x, convertedXPos);
-	        	float4 maskTex = maskTexture(dist, i.uv);
+	        	fixed convertedXPos = _UVXPos + i.uv.y / _MaskSlope;
+	        	fixed dist = distance(i.uv.x, convertedXPos);
+	        	half4 maskTex = maskTexture(dist, i.uv);
 	        	return maskTex;
 	        }
 	        ENDCG
