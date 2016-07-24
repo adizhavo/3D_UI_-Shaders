@@ -1,9 +1,5 @@
 ﻿Shader "GG Shader/ImageRender"
 {
-	Properties
-	{
-		_MainTex ("Texture", 2D) = "white" {}
-	}
 	SubShader 
 	{
     	Tags {"Queue"="Transparent" "RenderType"="Transparent"}

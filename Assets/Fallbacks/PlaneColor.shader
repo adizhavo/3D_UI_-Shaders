@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		_Color ("Color", 2D) = "black" {}
+		_Color ("Color", Color) = (1, 1, 1, 0)
 	}
 	SubShader 
 	{
@@ -17,24 +17,21 @@
 
 	        #include "UnityCG.cginc"
 
-	        uniform float _Color;
+	        uniform half4 _Color;
 
 	        struct input 
 	        {
 	            float4 pos : POSITION;
-	            float2 uv : TEXCOORD0;
 	        };
 
 	        struct output 
 	        {
 	            float4 pos : SV_POSITION;
-	            float2 uv : TEXCOORD0;
 	        };
 	        
 	        output vert (input v) 
 	        {
 	            output o;
-	            o.uv = v.uv;
 	            o.pos = mul(UNITY_MATRIX_MVP, v.pos);
 	            return o;
 	        }
