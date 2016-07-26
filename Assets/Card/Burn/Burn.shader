@@ -90,4 +90,6 @@
 			ENDCG
 		}
 	}
+
+	Fallback "GG Shader/ImageRender"
 }
