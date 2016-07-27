@@ -74,4 +74,6 @@
 			ENDCG
 		}
 	}
+
+	Fallback "GG Shader/PlaneColor"
 }
